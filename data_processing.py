@@ -13,18 +13,23 @@ def load_data(file_path):
     return pd.read_csv(file_path)
 
 
-def normalize_data(data):
+def process_data(df):
     """
-    Normalize the data to be in the range [0, 1].
+    Process the data: encode text data as numbers.
     Args:
-        data (np.ndarray): Data to normalize.
+        df (pd.dataFrame): Data Frame cointaiining the data.
     Returns:
-        np.ndarray: Normalized data.
+        np.ndarray: Feature data as a NumPy array.
+        np.ndarray: Labels as a NumPy array.
     """
-    return data / np.max(data, axis=0)
+    df['question'] = df['question'].astype('category')
+    df['answer'] = df['answer'].astype('category')
+    X = df['Question'].cat.codes.values.reshape(-1, 1)
+    y = df['Answer'].cat.codes.values.reshape(-1, 1)
+    return X, y
 
 
-def train_test_split(data, labels, test_size=0.2):
+def train_test_split(X, y, test_size=0.2):
     """
     Split the data into training and testing sets.
     Args:
@@ -35,7 +40,7 @@ def train_test_split(data, labels, test_size=0.2):
         tuple: Training data, testing data, training labels, testing labels
     """
 
-    total_samples = data.shape[0]
+    total_samples = X.shape[0]
     test_samples = int(total_samples * test_size)
 
     indices = np.random.permutation(total_samples)
@@ -43,4 +48,4 @@ def train_test_split(data, labels, test_size=0.2):
     train_indices = indices[test_samples:]
 
 
-    return data[train_indices], data[test_indices], labels[train_indices], labels[test_indices]
+    return X[train_indices], X[test_indices], y[train_indices], y[test_indices]

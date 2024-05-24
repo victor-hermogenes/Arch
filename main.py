@@ -6,13 +6,12 @@ import utils
 
 def main():
     # Load and preprocess data
-    file_path = input("Give your excel file path")
-    data = dp.load_data(file_path)
-    data = dp.normalize_data(data)
+    file_path = input("Give your excel file path: ")
+    df = dp.load_data(file_path)
+    X, y = dp.process_data(df)
 
-    # Assuming the last column is the label
-    X = data[:, :-1]
-    y = data[:, -1].reshape(-1, 1)
+    # Normalize data
+    X = dp.normalize_data(X)
 
     # Split data into training and testing sets
     X_train, X_test, y_train, y_test = dp.train_test_split(X, y, test_size=0.2)
