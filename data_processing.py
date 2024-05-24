@@ -9,7 +9,7 @@ def load_data(file_path):
     Returns:
         np.ndarray: Loaded data as NumPy array.
     """
-    return np.loadtxt(file_path, delimeter=",")
+    return np.loadtxt(file_path, delimiter=',')
 
 
 def normalize_data(data):
