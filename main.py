@@ -1,6 +1,7 @@
 import data_processing as dp
 from neural_network import NeuralNetwork as nw
 import numpy as np
+import utils
 
 
 def main():
@@ -27,6 +28,7 @@ def main():
     nn = nw(input_size, hidden_size, output_size)
 
     # Training Loop
+    losses = []
     for epoch in range(epochs):
         #Forward Pass
         output = nn.forward(X_train)
@@ -35,10 +37,14 @@ def main():
         # Backward pass and Weight Update
         nn.backward(y_train, learning_rate)
 
-        # Print Loss Every 1000 Epochs
+        # Calculate and log loss
+        loss = np.mean(np.square(y_train - output))
+        losses.appen(loss)
         if epoch % 1000 == 0:
-            loss = np.mean(np.square(y_train - output))
-            print(f'Epoch {epoch}, Loss: {loss}')
+            utils.plot_loss(epoch, loss)
+
+    # Plot training loss
+    utils.plot_loss(losses)
 
     # Testing the Neural Networkd
     test_output = nn.forward(X_test)
